@@ -1,9 +1,7 @@
 import React from 'react'
-import Header from './components/header'
-import Footer from './components/footer'
 import Hero from './components/hero'
 import { client } from '@/sanity/lib/client'
-import Navbar from './components/Navbar'
+
 
 const Homepage = async() => {
      const query = `*[_type == "blog"] | order(_updatedAt asc){
