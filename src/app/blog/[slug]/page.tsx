@@ -2,19 +2,21 @@ import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import { PortableText } from "next-sanity";
 import Image from "next/image";
-import { notFound } from "next/navigation"; 
+import { notFound } from "next/navigation";
 
-// Define props type
 type PageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>; // ✅ Fix: params is now a Promise
 };
 
-export default async function BlogPage({ params: { slug } }: PageProps) {
-  //  Use parameterized query for security
+export default async function BlogPage({ params }: PageProps) {
+  // ✅ Await params to extract slug
+  const { slug } = await params;
+
+  // ✅ Use parameterized query for security
   const query = `*[_type == "blog" && slug.current == $slug][0]`;
   const data = await client.fetch(query, { slug });
 
-  //  Handle missing blog post
+  // ✅ Handle missing blog post
   if (!data) return notFound();
 
   return (
